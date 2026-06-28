@@ -1,3 +1,4 @@
+import { element } from "prop-types";
 import React, { useState } from "react";
 
 export default function TextForm(props) {
@@ -18,7 +19,7 @@ export default function TextForm(props) {
   const handleExtraSpace = () => {
     let newText = text.split(/[ ]+/);
     setText(newText.join(" "));
-    props.showAlert("Extra space removed!","success")
+    props.showAlert("Extra space removed!", "success");
   };
   return (
     <>
@@ -34,38 +35,41 @@ export default function TextForm(props) {
             value={text}
             onChange={handleOnChange}
             style={{
-              backgroundColor: props.mode === "dark" ? "grey" : "white",
+              backgroundColor: props.mode === "dark" ? "#13466e" : "white",
               color: props.mode === "dark" ? "white" : "black",
             }}
           />
           <label htmlFor="floatingTextarea"></label>
-          <button className="btn btn-primary mx-2 mt-1" onClick={handleUpClick}>
+          <button disabled={text.length===0} className="btn btn-primary mx-2 mt-1" onClick={handleUpClick}>
             Convert to Uppercase
           </button>
-          <button className="btn btn-primary mx-2 mt-1" onClick={handleLOClick}>
+          <button disabled={text.length===0}  className="btn btn-primary mx-2 mt-1" onClick={handleLOClick}>
             Convert to Lowercase
           </button>
           <button
+          disabled={text.length===0}
             className="btn btn-primary mx-2 mt-1"
             onClick={() => {
               navigator.clipboard.writeText(text);
-              props.showAlert("Copied to Clipboard!","success")
+              props.showAlert("Copied to Clipboard!", "success");
             }}
           >
             Text Copy
           </button>
           <button
+          disabled={text.length===0}
             className="btn btn-primary mx-2 mt-1"
             onClick={handleExtraSpace}
           >
             Remove Extra Space
           </button>
           <button
+          disabled={text.length===0}
             className="btn btn-primary mx-2 mt-1"
             onClick={() => {
               const newText = "";
               setText(newText);
-              props.showAlert("Text cleared!","success")
+              props.showAlert("Text cleared!", "success");
             }}
           >
             Clear
@@ -80,16 +84,27 @@ export default function TextForm(props) {
           your text summery
         </h2>
         <p>
-          {text.split(" ").length} words and {text.length} characters
+          {
+            text.split(" ").filter((element) => {
+              return element.length !== 0;
+            }).length
+          }{" "}
+          words and {text.length} characters
         </p>
-        <p>{0.008 * text.split(" ").length}Minutes read</p>
+        <p>
+          {0.008 *
+            text.split(" ").filter((element) => {
+              return element.length !== 0;
+            }).length}
+          Minutes read
+        </p>
         <h2 style={{ color: props.mode === "dark" ? "white" : "#042743" }}>
           preview
         </h2>
         <p>
           {text.length > 0
             ? text
-            : "Enter something  in the textbox above to preview it here"}
+            : "Nothing to preview!"}
         </p>
       </div>
     </>
